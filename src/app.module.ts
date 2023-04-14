@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { CarsModule } from './cars/cars.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { Car } from './cars/car.entity';
-import { User } from './auth/user.entity';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { Env } from './shared/enums/env.enum';
 

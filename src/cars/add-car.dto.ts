@@ -1,11 +1,33 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { EngineTypes } from 'src/types';
 
 export class AddCarDto {
   @IsNotEmpty()
+  @IsString()
   brand: string;
 
   @IsNotEmpty()
+  @IsString()
   model: string;
 
-  description: string;
+  image?: string;
+
+  @IsNotEmpty()
+  engineType: EngineTypes;
+
+  @IsNotEmpty()
+  @IsString()
+  registrationDate: string;
+
+  @IsNotEmpty()
+  @IsString()
+  nmbrOfKm: number;
+
+  @IsNotEmpty()
+  @IsString()
+  color: string;
+
+  @IsNotEmpty()
+  @IsString()
+  yearOfProduction: number;
 }

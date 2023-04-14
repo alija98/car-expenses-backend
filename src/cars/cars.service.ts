@@ -15,6 +15,7 @@ export class CarsService {
   async getCars(user: User) {
     const query = this._carsRepository.createQueryBuilder('car');
     query.where({ user });
+    query.orderBy('ascending');
 
     try {
       const cars = await query.getMany();
@@ -25,16 +26,64 @@ export class CarsService {
   }
 
   async addCar(addCarDto: AddCarDto, user: User): Promise<Car> {
-    const { brand, model, description } = addCarDto;
+    const {
+      brand,
+      model,
+      engineType,
+      registrationDate,
+      nmbrOfKm,
+      color,
+      yearOfProduction,
+    } = addCarDto;
+    const imageWithOutNullBytes = addCarDto.image.replace(/\0/g, '');
+
     const car = this._carsRepository.create({
       brand,
-      description: description || '',
       model,
       user,
+      image: imageWithOutNullBytes,
+      engineType,
+      registrationDate,
+      nmbrOfKm,
+      color,
+      yearOfProduction,
     });
 
     try {
       await this._carsRepository.save(car);
+      return car;
+    } catch (error) {
+      console.log('error je ', error);
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async removeCar(carId: string, user: User) {
+    const doesExists = this._carsRepository.findOneBy({ user: user });
+
+    if (doesExists) {
+      try {
+        await this._carsRepository.delete({
+          id: carId,
+        });
+        return;
+      } catch (error) {
+        console.log('error je ', error);
+
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  async getCarById(carId: string, user: User): Promise<Car> {
+    try {
+      const query = this._carsRepository.createQueryBuilder('car');
+      query.where({
+        user: user,
+        id: carId,
+      });
+      const car = query.getOneOrFail();
       return car;
     } catch (error) {
       console.log('error je ', error);

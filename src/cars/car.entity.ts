@@ -1,7 +1,13 @@
 import { User } from '../auth/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  IsNull,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { Optional } from '@nestjs/common';
+import { EngineTypes } from 'src/types';
 
 @Entity()
 export class Car {
@@ -15,8 +21,22 @@ export class Car {
   model: string;
 
   @Column()
-  @Optional()
-  description: string;
+  image: string;
+
+  @Column()
+  engineType: EngineTypes;
+
+  @Column()
+  registrationDate: string;
+
+  @Column()
+  nmbrOfKm: number;
+
+  @Column()
+  color: string;
+
+  @Column()
+  yearOfProduction: number;
 
   @ManyToOne(() => User, (user) => user.cars, { eager: false })
   @Exclude({ toPlainOnly: true })

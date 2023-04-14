@@ -18,15 +18,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(payload: JwtPayload): Promise<User> {
-    const { username } = payload;
+    const { email } = payload;
 
     const user: User = await this._usersRepository
       .findOneByOrFail({
-        username,
+        email,
       })
       .catch(() => {
         throw new BadRequestException('User not found');
       });
+
     return user;
   }
 }
